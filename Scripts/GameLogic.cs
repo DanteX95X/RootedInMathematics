@@ -22,6 +22,10 @@ public class GameLogic : Node
 		random = new Random(3);
 		currentNode = root;
 		currentNode.OnActivate += ReactOnActivate;
+	}
+
+	public void InitializeGame()
+	{
 		ActivateCurrentNode();
 	}
 

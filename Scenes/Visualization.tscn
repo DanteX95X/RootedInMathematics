@@ -6,11 +6,11 @@
 
 [node name="Visualization" type="Node2D"]
 
-[node name="PlayerCharacter" parent="." instance=ExtResource( 1 )]
-
-[node name="Camera2D" type="Camera2D" parent="PlayerCharacter"]
-current = true
-
 [node name="TreeVisualizer" type="Node" parent="."]
 script = ExtResource( 2 )
 treeNodeScene = ExtResource( 3 )
+
+[node name="PlayerCharacter" parent="TreeVisualizer" instance=ExtResource( 1 )]
+
+[node name="Camera2D" type="Camera2D" parent="TreeVisualizer/PlayerCharacter"]
+current = true
