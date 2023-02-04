@@ -15,9 +15,7 @@ public class TreeVisualizer : Node2D
 	private PackedScene edgeLabelScene = null;
 
 	private GameSystems gameSystems;
-	private Node2D playerCharacter;
-	private Camera2D camera;
-	private Vector2 cachedPosition = Vector2.Zero;
+	private PlayerCharacter playerCharacter;
 	private Dictionary<TreeNode, Node2D> modelViewMapping = new Dictionary<TreeNode, Node2D>();
 	private const float distance = 500;
 	private const float rightAngle = 1.5708f;
@@ -34,13 +32,12 @@ public class TreeVisualizer : Node2D
 		gameSystems = GetNode<GameSystems>("/root/Root/GameSystems");
 		gameSystems.GameLogic.OnMoveToNode += QueueUpMovement;
 
-		playerCharacter = GetNode<Node2D>("PlayerCharacter");
-		camera = playerCharacter.GetNode<Camera2D>("Camera");
+		playerCharacter = GetNode<PlayerCharacter>("PlayerCharacter");
 	}
 
 	public override void _Process(float delta)
 	{
-		if (visualizationQueue.Any())
+		if (visualizationQueue.Any() && !playerCharacter.IsMoving())
 		{
 			var data = visualizationQueue.Dequeue();
 			OnMovedToNode(data.destination, data.source);
@@ -87,17 +84,24 @@ public class TreeVisualizer : Node2D
 			
 			SpawnEdges(destinationView, destination);
 			modelViewMapping.Add(destination, destinationView);
+			var cachedPosition = playerCharacter.Position;
 			playerCharacter.Position = destinationView.Position;
 			playerCharacter.LookAt(lookingPosition);
 			destinationView.Rotation = playerCharacter.Rotation;
 			destinationView.Rotate(rightAngle);
+			playerCharacter.Position = cachedPosition;
+			playerCharacter.RequestPositionChange(destinationView.Position);
 		}
 		else
 		{
 			Node2D sourceView = modelViewMapping[source];
+			var cachedPosition = playerCharacter.Position;
 			playerCharacter.Position = destinationView.Position;
+			playerCharacter.LookAt(sourceView.Position);
 			playerCharacter.Rotation = destinationView.Rotation;
 			playerCharacter.Rotate(-rightAngle);
+			playerCharacter.Position = cachedPosition;
+			playerCharacter.RequestPositionChange(destinationView.Position);
 		}
 		
 		UpdateVisibleNodes(destination, destinationView);
