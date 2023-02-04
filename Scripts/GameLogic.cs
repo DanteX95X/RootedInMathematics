@@ -9,11 +9,14 @@ public class GameLogic : Node
 	private TreeNode currentNode;
 	private Random random;
 
+	[Export(PropertyHint.Range, "1,10,1")]
+	private int winningDepth = 3;
+
 	private int mistakesCounter = 0;
 
 	public override void _Ready()
 	{
-		root = new TreeNode(null);
+		root = new TreeNode(null, 0);
 		random = new Random(3);
 		currentNode = root;
 		currentNode.OnActivate += ReactOnActivate;
@@ -64,7 +67,10 @@ public class GameLogic : Node
 
 	private void CheckWinCondition()
 	{
-		GD.Print("You won");
+		if (currentNode.Depth >= winningDepth)
+		{
+			GD.Print("You won");
+		}
 	}
 
 	private void TraverseUpTheTree()

@@ -7,7 +7,8 @@ namespace RootedInMathematics.Scripts
 	public class TreeNode
 	{
 		private readonly TreeNode parent;
-		private List<(TreeNode node, Numeric edgeValue)> children = new();
+		private readonly int depth;
+		private readonly List<(TreeNode node, Numeric edgeValue)> children = new();
 		private Numeric nodeValue;
 		private int correctChildIndex;
 
@@ -15,11 +16,13 @@ namespace RootedInMathematics.Scripts
 
 		public TreeNode Parent => parent;
 		public Numeric NodeValue => nodeValue;
+		public int Depth => depth;
 		public List<(TreeNode node, Numeric edgeValue)> Children => children;
 
-		public TreeNode(TreeNode parent)
+		public TreeNode(TreeNode parent, int depth)
 		{
 			this.parent = parent;
+			this.depth = depth;
 		}
 
 		public void GenerateNode(Random random)
@@ -37,7 +40,7 @@ namespace RootedInMathematics.Scripts
 				generatedPossibilities.Add(childValue);
 				
 				Numeric edgeValue = new(childValue);
-				children.Add((new TreeNode(this), edgeValue));
+				children.Add((new TreeNode(this, depth + 1), edgeValue));
 			}
 			correctChildIndex = random.Next(children.Count);
 			Numeric value = children[correctChildIndex].edgeValue;
