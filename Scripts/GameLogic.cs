@@ -1,21 +1,19 @@
 using Godot;
-using System;
+using RootedInMathematics.Scripts;
 
 public class GameLogic : Node
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
+	private TreeNode root;
+	private TreeNode currentNode;
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
-		GD.Print("Hello from C# to Godot :)");
-    }
+	public override void _Ready()
+	{
+		root = new TreeNode(null, new Numeric(5f));
+		currentNode = root;
+		root.GenerateNode();
+	}
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+	public override void _Process(float delta)
+	{
+	}
 }
