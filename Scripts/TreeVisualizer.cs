@@ -26,6 +26,8 @@ public class TreeVisualizer : Node2D
 	private Queue<Node2D> visibleNodes = new Queue<Node2D>();
 	private const int allowedVisibles = 2;
 
+	private SceneTreeTween playerTween = null;
+
 	public override void _Ready()
 	{
 		GD.Print(GetPath());
@@ -37,7 +39,7 @@ public class TreeVisualizer : Node2D
 
 	public override void _Process(float delta)
 	{
-		if (visualizationQueue.Any() && !playerCharacter.IsMoving())
+		if (visualizationQueue.Any() && (playerTween == null || !playerTween.IsRunning()))
 		{
 			var data = visualizationQueue.Dequeue();
 			OnMovedToNode(data.destination, data.source);
@@ -85,23 +87,37 @@ public class TreeVisualizer : Node2D
 			SpawnEdges(destinationView, destination);
 			modelViewMapping.Add(destination, destinationView);
 			var cachedPosition = playerCharacter.Position;
+			var cachedRotation = playerCharacter.Rotation;
 			playerCharacter.Position = destinationView.Position;
 			playerCharacter.LookAt(lookingPosition);
 			destinationView.Rotation = playerCharacter.Rotation;
 			destinationView.Rotate(rightAngle);
 			playerCharacter.Position = cachedPosition;
-			playerCharacter.RequestPositionChange(destinationView.Position);
+			var targetRotation = playerCharacter.Rotation;
+			playerCharacter.Rotation = cachedRotation;
+
+			playerTween = playerCharacter.CreateTween();
+			playerTween.TweenProperty(playerCharacter, "rotation", targetRotation, 0.2f);
+			playerTween.TweenProperty(playerCharacter, "position", destinationView.Position, 1.0f);
 		}
 		else
 		{
 			Node2D sourceView = modelViewMapping[source];
 			var cachedPosition = playerCharacter.Position;
+			var cachedRotation = playerCharacter.Rotation;
 			playerCharacter.Position = destinationView.Position;
 			playerCharacter.LookAt(sourceView.Position);
+			var midwayRotation = playerCharacter.Rotation;
 			playerCharacter.Rotation = destinationView.Rotation;
 			playerCharacter.Rotate(-rightAngle);
 			playerCharacter.Position = cachedPosition;
-			playerCharacter.RequestPositionChange(destinationView.Position);
+			var targetRotation = playerCharacter.Rotation;
+			playerCharacter.Rotation = cachedRotation;
+			
+			playerTween = playerCharacter.CreateTween();
+			playerTween.TweenProperty(playerCharacter, "rotation", midwayRotation, 0.2f);
+			playerTween.TweenProperty(playerCharacter, "position", destinationView.Position, 1.0f);
+			playerTween.TweenProperty(playerCharacter, "rotation", targetRotation, 0.2f);
 		}
 		
 		UpdateVisibleNodes(destination, destinationView);

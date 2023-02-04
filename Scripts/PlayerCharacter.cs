@@ -12,9 +12,10 @@ public class PlayerCharacter : Sprite
 	{
 	}
 
-	public void RequestPositionChange(Vector2 newPosition)//, Vector2 lookingPosition, float angle)
+	public void RequestPositionChange(Vector2 newPosition, float targetRotation)//, Vector2 lookingPosition, float angle)
 	{
 		tween = CreateTween();
+		tween.TweenProperty(this, "rotation", targetRotation, 0.2f);
 		tween.TweenProperty(this, "position", newPosition, 1f);
 		//tween.TweenMethod(this, "look_at", previousLookingPosition, lookingPosition, 0.2f);
 		//tween.TweenProperty(this, "rotation", Rotation + angle, 0.2f);
