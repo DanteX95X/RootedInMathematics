@@ -2,7 +2,7 @@ using Godot;
 
 namespace RootedInMathematics.Scripts
 {
-	public struct Numeric
+	public class Numeric
 	{
 		public readonly float value;
 

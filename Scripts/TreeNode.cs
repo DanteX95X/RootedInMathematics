@@ -44,9 +44,6 @@ namespace RootedInMathematics.Scripts
 			nodeValue = value.ToPower(2);
 
 			GD.Print($"node generated with value {nodeValue.value}");
-			
-			ActivateNode();
-			//TODO: generate children, node value, edge values
 		}
 
 		public void ActivateNode()
