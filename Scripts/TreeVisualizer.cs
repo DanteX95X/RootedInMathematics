@@ -26,6 +26,7 @@ public class TreeVisualizer : Node2D
 		new Queue<(TreeNode destination, TreeNode source)>();
 
 	private Queue<Node2D> visibleNodes = new Queue<Node2D>();
+	private const int allowedVisibles = 2;
 
 	public override void _Ready()
 	{
@@ -70,7 +71,6 @@ public class TreeVisualizer : Node2D
 			}
 			else
 			{
-				//sourceView.Visible = false;
 				lookingPosition = sourceView.Position;
 				int childIndex = source.Children.FindIndex(data => data.node == destination);
 
@@ -87,7 +87,6 @@ public class TreeVisualizer : Node2D
 			
 			SpawnEdges(destinationView, destination);
 			modelViewMapping.Add(destination, destinationView);
-			//destinationView.Visible = true;
 			playerCharacter.Position = destinationView.Position;
 			playerCharacter.LookAt(lookingPosition);
 			destinationView.Rotation = playerCharacter.Rotation;
@@ -96,19 +95,18 @@ public class TreeVisualizer : Node2D
 		else
 		{
 			Node2D sourceView = modelViewMapping[source];
-			// sourceView.Visible = false;
-			// destinationView.Visible = true;
 			playerCharacter.Position = destinationView.Position;
 			playerCharacter.Rotation = destinationView.Rotation;
 			playerCharacter.Rotate(-rightAngle);
 		}
 		
-		while (visibleNodes.Count > 3)
-		{
-			var disappearingView = visibleNodes.Dequeue();
-			disappearingView.Visible = false;
-		}
-		
+		UpdateVisibleNodes(destination, destinationView);
+	}
+
+	private void UpdateVisibleNodes(TreeNode destination, Node2D destinationView)
+	{
+		PruneRedundantVisibleNodes();
+
 		if (destination.Parent != null)
 		{
 			var parentView = modelViewMapping[destination.Parent];
@@ -117,11 +115,22 @@ public class TreeVisualizer : Node2D
 				visibleNodes.Enqueue(parentView);
 			}
 		}
+
+		PruneRedundantVisibleNodes();
 		visibleNodes.Enqueue(destinationView);
-		
+
 		foreach (var node in visibleNodes)
 		{
 			node.Visible = true;
+		}
+	}
+
+	private void PruneRedundantVisibleNodes()
+	{
+		while (visibleNodes.Count > allowedVisibles)
+		{
+			var disappearingView = visibleNodes.Dequeue();
+			disappearingView.Visible = false;
 		}
 	}
 

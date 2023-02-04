@@ -13,10 +13,9 @@ margin_right = 82.0
 margin_bottom = 78.0
 
 [node name="Text" type="Label" parent="Container"]
-margin_left = 35.0
+margin_left = 80.0
 margin_top = 31.0
-margin_right = 124.0
+margin_right = 80.0
 margin_bottom = 129.0
 rect_pivot_offset = Vector2( 33, 62 )
 theme = ExtResource( 2 )
-text = "17"
