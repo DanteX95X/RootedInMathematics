@@ -12,6 +12,9 @@ public class TreeVisualizer : Node2D
 	[Export]
 	private PackedScene edgeScene = null;
 
+	[Export]
+	private PackedScene edgeLabelScene = null;
+
 	private GameSystems gameSystems;
 	private Node2D playerCharacter;
 	private Camera2D camera;
@@ -110,13 +113,18 @@ public class TreeVisualizer : Node2D
 			destinationView.AddChild(edge);
 			edge.Position = Vector2.Zero;
 			edge.Translate(newDisplacement);
-			var text = edge.GetNode<Label>("Container/Text");
-			text.Text = destination.Children[i].edgeValue.value.ToString();
 
 			var sprite = (Sprite) destinationView;
 			edge.Scale = new Vector2(1, distance * 4/ sprite.GetRect().Size.y);
 			edge.LookAt(destinationView.Position);
 			edge.Rotate(rightAngle);
+
+			var edgeLabel = (Node2D) edgeLabelScene.Instance();
+			destinationView.AddChild(edgeLabel);
+			edgeLabel.Position = Vector2.Zero;
+			edgeLabel.Translate(newDisplacement);
+			var text = edgeLabel.GetNode<Label>("Container/Text");
+			text.Text = destination.Children[i].edgeValue.value.ToString();
 		}
 	}
 }
