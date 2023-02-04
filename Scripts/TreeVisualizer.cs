@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Globalization;
 using RootedInMathematics.Scripts;
 
@@ -18,19 +17,22 @@ public class TreeVisualizer : Node
 	{
 		GD.Print(GetPath());
 		gameSystems = GetNode<GameSystems>("/root/Root/GameSystems");
-		gameSystems.GameLogic.OnNodeActivated += GameLogicOnOnNodeActivated;
+		gameSystems.GameLogic.OnMoveToNode += OnMovedToNode;
 
 		playerCharacter = GetNode<Node2D>("PlayerCharacter");
 	}
 
-	private void GameLogicOnOnNodeActivated(TreeNode currentNode)
+	private void OnMovedToNode(TreeNode currentNode, TreeNode previousNode)
 	{
 		var nodeView = (Node2D)treeNodeScene.Instance();
 		AddChild(nodeView);
 		nodeView.Position = cachedPosition;
 		cachedPosition += new Vector2(0, 200);
 		var textNode = nodeView.GetNode<Label>("Container/Text");
-		textNode.Text = currentNode.NodeValue.value.ToString(CultureInfo.CurrentCulture);
+		if (currentNode.NodeValue != null)
+		{
+			textNode.Text = currentNode.NodeValue.value.ToString(CultureInfo.CurrentCulture);
+		}
 
 		playerCharacter.Position = nodeView.Position;
 	}

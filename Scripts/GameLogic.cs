@@ -14,7 +14,7 @@ public class GameLogic : Node
 
 	private int mistakesCounter = 0;
 	
-	public event Action<TreeNode> OnNodeActivated;
+	public event Action<TreeNode, TreeNode> OnMoveToNode;
 
 	public override void _Ready()
 	{
@@ -27,6 +27,7 @@ public class GameLogic : Node
 	public void InitializeGame()
 	{
 		ActivateCurrentNode();
+		OnMoveToNode?.Invoke(currentNode, null);
 	}
 
 	public override void _Process(float delta)
@@ -37,7 +38,6 @@ public class GameLogic : Node
 	public void ReactOnActivate(TreeNode node)
 	{
 		GD.Print($"node activated {node.NodeValue.value} from GameLogic");
-		OnNodeActivated?.Invoke(node);
 	}
 
 	public void MoveToChild(int childIndex)
@@ -47,17 +47,19 @@ public class GameLogic : Node
 		GD.Print($"Moving to child {childIndex}");
 		currentNode = currentNode.Children[childIndex].node;
 		currentNode.OnActivate += ReactOnActivate;
-		
+
 		if (previousNode.IsAnswerCorrect(childIndex))
 		{
 			GD.Print("Answer correct");
 			if (mistakesCounter == 0)
 			{
 				ActivateCurrentNode();
+				OnMoveToNode?.Invoke(currentNode, previousNode);
 				CheckWinCondition();
 			}
 			else
 			{
+				OnMoveToNode?.Invoke(currentNode, previousNode);
 				TraverseUpTheTree();
 				--mistakesCounter;
 			}
@@ -67,6 +69,7 @@ public class GameLogic : Node
 			GD.Print("Answer incorrect");
 			++mistakesCounter;
 			ActivateCurrentNode();
+			OnMoveToNode?.Invoke(currentNode, previousNode);
 		}
 	}
 
@@ -94,6 +97,8 @@ public class GameLogic : Node
 		{
 			throw new ConstraintException("Parent is null when traversing up the tree");
 		}
+		
+		OnMoveToNode?.Invoke(parent, currentNode);
 
 		var parentOfParent = parent.Parent;
 		if (parentOfParent == null)
@@ -101,6 +106,7 @@ public class GameLogic : Node
 			throw new ConstraintException("Parent of parent is null when traversing up the tree");
 		}
 
+		OnMoveToNode?.Invoke(parentOfParent, parent);
 		currentNode = parentOfParent;
 		currentNode.ActivateNode();
 	}
