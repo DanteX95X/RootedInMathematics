@@ -1,3 +1,5 @@
+using Godot;
+
 namespace RootedInMathematics.Scripts
 {
 	public struct Numeric
@@ -7,6 +9,11 @@ namespace RootedInMathematics.Scripts
 		public Numeric(float value)
 		{
 			this.value = value;
+		}
+
+		public Numeric ToPower(float power)
+		{
+			return new Numeric(Mathf.Pow(value, power));
 		}
 	}
 }
