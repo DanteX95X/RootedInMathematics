@@ -8,11 +8,15 @@ public class TreeVisualizer : Node2D
 	[Export]
 	private PackedScene treeNodeScene = null;
 
+	[Export]
+	private PackedScene edgeScene = null;
+
 	private GameSystems gameSystems;
 	private Node2D playerCharacter;
 	private Camera2D camera;
 	private Vector2 cachedPosition = Vector2.Zero;
 	private Dictionary<TreeNode, Node2D> modelViewMapping = new Dictionary<TreeNode, Node2D>();
+	private const float distance = 200; 
 
 	public override void _Ready()
 	{
@@ -34,7 +38,7 @@ public class TreeVisualizer : Node2D
 			var textNode = destinationView.GetNode<Label>("Container/Text");
 			if (destination.NodeValue != null)
 			{
-				textNode.Text = destination.NodeValue.value.ToString(CultureInfo.CurrentCulture);
+				textNode.Text = destination.NodeValue.value.ToString();
 			}
 			
 			if (source == null || !modelViewMapping.TryGetValue(source, out Node2D sourceView))
@@ -44,31 +48,36 @@ public class TreeVisualizer : Node2D
 			else
 			{
 				sourceView.Visible = false;
+				lookingPosition = sourceView.Position;
 				int childIndex = source.Children.FindIndex(data => data.node == destination);
-				
-				Vector2 displacement = Vector2.Down * 200;
-				if (source.Parent != null && modelViewMapping.TryGetValue(source.Parent, out Node2D sourceParentView))
+
+				Vector2 displacement = Vector2.Down * distance;
+				if (source.Parent != null &&
+					modelViewMapping.TryGetValue(source.Parent, out Node2D sourceParentView))
 				{
 					displacement = sourceView.Position - sourceParentView.Position;
 				}
 
 				Vector2 currentDisplacement = displacement.Rotated(-1 * (childIndex - 1));
 				destinationView.Position = sourceView.Position + currentDisplacement;
-
-				lookingPosition = sourceView.Position;
 			}
 			
 			modelViewMapping.Add(destination, destinationView);
-			// destinationView.LookAt(lookingPosition);
-			// destinationView.Rotate(1.5708f);
+			destinationView.Visible = true;
+			playerCharacter.Position = destinationView.Position;
+			playerCharacter.LookAt(lookingPosition);
+			destinationView.Rotation = playerCharacter.Rotation;
+			destinationView.Rotate(1.5708f);
 		}
-
-		destinationView.Visible = true;
-		playerCharacter.Position = destinationView.Position;
-		playerCharacter.LookAt(lookingPosition);
-		destinationView.Rotation = playerCharacter.Rotation;
-		destinationView.Rotate(1.5708f);
-		
+		else
+		{
+			Node2D sourceView = modelViewMapping[source];
+			sourceView.Visible = false;
+			destinationView.Visible = true;
+			playerCharacter.Position = destinationView.Position;
+			playerCharacter.Rotation = destinationView.Rotation;
+			playerCharacter.Rotate(-1.5708f);
+		}
 	}
 
 	public override void _Process(float delta)

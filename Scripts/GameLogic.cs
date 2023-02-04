@@ -59,6 +59,7 @@ public class GameLogic : Node
 			}
 			else
 			{
+				GD.Print("Up the tree");
 				OnMoveToNode?.Invoke(currentNode, previousNode);
 				TraverseUpTheTree();
 				--mistakesCounter;
