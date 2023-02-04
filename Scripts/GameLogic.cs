@@ -13,6 +13,8 @@ public class GameLogic : Node
 	private int winningDepth = 3;
 
 	private int mistakesCounter = 0;
+	
+	public event Action<TreeNode> OnNodeActivated;
 
 	public override void _Ready()
 	{
@@ -23,16 +25,24 @@ public class GameLogic : Node
 		ActivateCurrentNode();
 	}
 
+	public override void _Process(float delta)
+	{
+		base._Process(delta);
+	}
+
 	public void ReactOnActivate(TreeNode node)
 	{
 		GD.Print($"node activated {node.NodeValue.value} from GameLogic");
+		OnNodeActivated?.Invoke(node);
 	}
 
 	public void MoveToChild(int childIndex)
 	{
 		var previousNode = currentNode;
+		previousNode.OnActivate -= ReactOnActivate;
 		GD.Print($"Moving to child {childIndex}");
 		currentNode = currentNode.Children[childIndex].node;
+		currentNode.OnActivate += ReactOnActivate;
 		
 		if (previousNode.IsAnswerCorrect(childIndex))
 		{
