@@ -5,6 +5,10 @@ public class GameSystems : Node
 {
 	private InputSystem inputSystem;
 	private GameLogic gameLogic;
+
+	private bool isInitialized = false;
+
+	public GameLogic GameLogic => gameLogic;
 	
 	public override void _Ready()
 	{
@@ -12,6 +16,15 @@ public class GameSystems : Node
 		gameLogic = GetNode<GameLogic>("GameLogic");
 
 		inputSystem.OnSelectChildAction += ProcessInput;
+	}
+
+	public override void _Process(float delta)
+	{
+		if (!isInitialized)
+		{
+			isInitialized = true;
+			gameLogic.InitializeGame();
+		}
 	}
 
 	private void ProcessInput(int childIndex)
