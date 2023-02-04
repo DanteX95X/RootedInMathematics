@@ -44,6 +44,7 @@ public class TreeVisualizer : Node2D
 			if (source == null || !modelViewMapping.TryGetValue(source, out Node2D sourceView))
 			{
 				destinationView.Position = Vector2.Zero;
+				SpawnEdges(destinationView, destination, Vector2.Down * distance);
 			}
 			else
 			{
@@ -60,6 +61,8 @@ public class TreeVisualizer : Node2D
 
 				Vector2 currentDisplacement = displacement.Rotated(-1 * (childIndex - 1));
 				destinationView.Position = sourceView.Position + currentDisplacement;
+
+				SpawnEdges(destinationView, destination, destinationView.Position - sourceView.Position);
 			}
 			
 			modelViewMapping.Add(destination, destinationView);
@@ -77,6 +80,21 @@ public class TreeVisualizer : Node2D
 			playerCharacter.Position = destinationView.Position;
 			playerCharacter.Rotation = destinationView.Rotation;
 			playerCharacter.Rotate(-1.5708f);
+		}
+	}
+
+	private void SpawnEdges(Node2D destinationView, TreeNode destination, Vector2 displacement)
+	{
+		var normalizedDisplacement = Vector2.Down;
+		for (int i = 0; i < destination.Children.Count; ++i)
+		{
+			var newDisplacement = normalizedDisplacement.Rotated(-1 * (i - 1)) * distance;
+			Node2D edge = (Node2D) edgeScene.Instance();
+			destinationView.AddChild(edge);
+			edge.Position = Vector2.Zero;
+			edge.Translate(newDisplacement);
+			var text = edge.GetNode<Label>("Container/Text");
+			text.Text = destination.Children[i].edgeValue.value.ToString();
 		}
 	}
 
