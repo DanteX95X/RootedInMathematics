@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 using System.Globalization;
+using System.Linq;
 using RootedInMathematics.Scripts;
 
 public class TreeVisualizer : Node2D
@@ -16,16 +17,33 @@ public class TreeVisualizer : Node2D
 	private Camera2D camera;
 	private Vector2 cachedPosition = Vector2.Zero;
 	private Dictionary<TreeNode, Node2D> modelViewMapping = new Dictionary<TreeNode, Node2D>();
-	private const float distance = 200; 
+	private const float distance = 200;
+
+	private Queue<(TreeNode destination, TreeNode source)> visualizationQueue =
+		new Queue<(TreeNode destination, TreeNode source)>();
 
 	public override void _Ready()
 	{
 		GD.Print(GetPath());
 		gameSystems = GetNode<GameSystems>("/root/Root/GameSystems");
-		gameSystems.GameLogic.OnMoveToNode += OnMovedToNode;
+		gameSystems.GameLogic.OnMoveToNode += QueueUpMovement;
 
 		playerCharacter = GetNode<Node2D>("PlayerCharacter");
 		camera = playerCharacter.GetNode<Camera2D>("Camera");
+	}
+
+	public override void _Process(float delta)
+	{
+		if (visualizationQueue.Any())
+		{
+			var data = visualizationQueue.Dequeue();
+			OnMovedToNode(data.destination, data.source);
+		}
+	}
+	
+	private void QueueUpMovement(TreeNode nextNode, TreeNode previousNode)
+	{
+		visualizationQueue.Enqueue((nextNode, previousNode));
 	}
 
 	private void OnMovedToNode(TreeNode destination, TreeNode source)
@@ -44,7 +62,6 @@ public class TreeVisualizer : Node2D
 			if (source == null || !modelViewMapping.TryGetValue(source, out Node2D sourceView))
 			{
 				destinationView.Position = Vector2.Zero;
-				SpawnEdges(destinationView, destination, Vector2.Down * distance);
 			}
 			else
 			{
@@ -61,10 +78,9 @@ public class TreeVisualizer : Node2D
 
 				Vector2 currentDisplacement = displacement.Rotated(-1 * (childIndex - 1));
 				destinationView.Position = sourceView.Position + currentDisplacement;
-
-				SpawnEdges(destinationView, destination, destinationView.Position - sourceView.Position);
 			}
 			
+			SpawnEdges(destinationView, destination);
 			modelViewMapping.Add(destination, destinationView);
 			destinationView.Visible = true;
 			playerCharacter.Position = destinationView.Position;
@@ -83,7 +99,7 @@ public class TreeVisualizer : Node2D
 		}
 	}
 
-	private void SpawnEdges(Node2D destinationView, TreeNode destination, Vector2 displacement)
+	private void SpawnEdges(Node2D destinationView, TreeNode destination)
 	{
 		var normalizedDisplacement = Vector2.Down;
 		for (int i = 0; i < destination.Children.Count; ++i)
@@ -96,10 +112,5 @@ public class TreeVisualizer : Node2D
 			var text = edge.GetNode<Label>("Container/Text");
 			text.Text = destination.Children[i].edgeValue.value.ToString();
 		}
-	}
-
-	public override void _Process(float delta)
-	{
-		base._Process(delta);
 	}
 }
