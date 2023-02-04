@@ -17,7 +17,8 @@ public class TreeVisualizer : Node2D
 	private Camera2D camera;
 	private Vector2 cachedPosition = Vector2.Zero;
 	private Dictionary<TreeNode, Node2D> modelViewMapping = new Dictionary<TreeNode, Node2D>();
-	private const float distance = 200;
+	private const float distance = 500;
+	private const float rightAngle = 1.5708f;
 
 	private Queue<(TreeNode destination, TreeNode source)> visualizationQueue =
 		new Queue<(TreeNode destination, TreeNode source)>();
@@ -86,7 +87,7 @@ public class TreeVisualizer : Node2D
 			playerCharacter.Position = destinationView.Position;
 			playerCharacter.LookAt(lookingPosition);
 			destinationView.Rotation = playerCharacter.Rotation;
-			destinationView.Rotate(1.5708f);
+			destinationView.Rotate(rightAngle);
 		}
 		else
 		{
@@ -95,7 +96,7 @@ public class TreeVisualizer : Node2D
 			destinationView.Visible = true;
 			playerCharacter.Position = destinationView.Position;
 			playerCharacter.Rotation = destinationView.Rotation;
-			playerCharacter.Rotate(-1.5708f);
+			playerCharacter.Rotate(-rightAngle);
 		}
 	}
 
@@ -104,13 +105,18 @@ public class TreeVisualizer : Node2D
 		var normalizedDisplacement = Vector2.Down;
 		for (int i = 0; i < destination.Children.Count; ++i)
 		{
-			var newDisplacement = normalizedDisplacement.Rotated(-1 * (i - 1)) * distance;
+			var newDisplacement = normalizedDisplacement.Rotated(-1 * (i - 1)) * (distance / 2);
 			Node2D edge = (Node2D) edgeScene.Instance();
 			destinationView.AddChild(edge);
 			edge.Position = Vector2.Zero;
 			edge.Translate(newDisplacement);
 			var text = edge.GetNode<Label>("Container/Text");
 			text.Text = destination.Children[i].edgeValue.value.ToString();
+
+			var sprite = (Sprite) destinationView;
+			edge.Scale = new Vector2(1, distance * 4/ sprite.GetRect().Size.y);
+			edge.LookAt(destinationView.Position);
+			edge.Rotate(rightAngle);
 		}
 	}
 }
