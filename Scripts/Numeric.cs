@@ -1,20 +1,21 @@
 using System;
-using Godot;
+using System.Numerics;
 
 namespace RootedInMathematics.Scripts
 {
 	public class Numeric
 	{
-		public readonly double value;
+		public readonly Complex complex;
 
-		public Numeric(double value)
+		public Numeric(double real, double imaginary)
 		{
-			this.value = value;
+			complex = new Complex(real, imaginary);
 		}
 
 		public Numeric ToPower(double power)
 		{
-			return new Numeric(Math.Round(Math.Pow(value, power), 2 ));
+			var otherComplex = Complex.Pow(complex, power);
+			return new Numeric(Math.Round(otherComplex.Real, 2 ), Math.Round(otherComplex.Imaginary, 2));
 		}
 	}
 }

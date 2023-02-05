@@ -53,7 +53,7 @@ public class GameLogic : Node
 
 	public void ReactOnActivate(TreeNode node)
 	{
-		GD.Print($"node activated {node.NodeValue.value} from GameLogic");
+		GD.Print($"node activated {node.NodeValue.complex} from GameLogic");
 	}
 
 	public void MoveToChild(int childIndex)
