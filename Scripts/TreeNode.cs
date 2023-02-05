@@ -11,6 +11,7 @@ namespace RootedInMathematics.Scripts
 		private readonly List<(TreeNode node, Numeric edgeValue)> children = new List<(TreeNode node, Numeric edgeValue)>();
 		private Numeric nodeValue;
 		private int correctChildIndex;
+		private const int upperLimit = 101;
 
 		public event Action<TreeNode> OnActivate; 
 
@@ -25,15 +26,22 @@ namespace RootedInMathematics.Scripts
 			this.depth = depth;
 		}
 
-		public void GenerateNode(Random random)
+		public void GenerateNode(Random random, NumberType numberType)
 		{
-			SortedSet<float> generatedPossibilities = new SortedSet<float>();
+			SortedSet<double> generatedPossibilities = new SortedSet<double>();
 			for (int i = 0; i < 3; ++i)
 			{
-				float childValue = 0;
+				double childValue = 0;
 				do
 				{
-					childValue = random.Next(1, 101);
+					if (numberType == NumberType.Integers)
+					{
+						childValue = random.Next(1, upperLimit);
+					}
+					else if (numberType == NumberType.Real)
+					{
+						childValue = Math.Round(random.NextDouble() + random.Next(1, upperLimit), 2);
+					}
 				}
 				while (generatedPossibilities.Contains(childValue));
 

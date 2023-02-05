@@ -1,19 +1,20 @@
+using System;
 using Godot;
 
 namespace RootedInMathematics.Scripts
 {
 	public class Numeric
 	{
-		public readonly float value;
+		public readonly double value;
 
-		public Numeric(float value)
+		public Numeric(double value)
 		{
 			this.value = value;
 		}
 
-		public Numeric ToPower(float power)
+		public Numeric ToPower(double power)
 		{
-			return new Numeric(Mathf.Pow(value, power));
+			return new Numeric(Math.Round(Math.Pow(value, power), 2 ));
 		}
 	}
 }
