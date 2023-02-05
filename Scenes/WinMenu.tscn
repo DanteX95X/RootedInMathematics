@@ -6,19 +6,27 @@
 visible = false
 
 [node name="Control" type="Control" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -40.0
 margin_right = 40.0
-margin_bottom = 40.0
+grow_vertical = 0
 
 [node name="Container" type="GridContainer" parent="Control"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -204.0
 margin_right = 577.0
-margin_bottom = 204.0
+grow_vertical = 0
 
 [node name="Time" type="Label" parent="Control/Container"]
 margin_right = 577.0
 margin_bottom = 100.0
 grow_horizontal = 0
+grow_vertical = 0
 rect_min_size = Vector2( 300, 100 )
 theme = ExtResource( 2 )
+custom_colors/font_color = Color( 0.176471, 0.913725, 1, 1 )
 text = "Time: 27m 13s"
 align = 1
 valign = 1
@@ -30,6 +38,7 @@ margin_bottom = 204.0
 grow_horizontal = 0
 rect_min_size = Vector2( 300, 100 )
 theme = ExtResource( 2 )
+custom_colors/font_color = Color( 0.176471, 0.913725, 1, 1 )
 text = "Mistakes: 15"
 align = 1
 valign = 1

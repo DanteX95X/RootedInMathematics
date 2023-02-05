@@ -62,7 +62,7 @@ public class TreeVisualizer : Node2D
 		inGameMenu.DisableResumeButton();
 		winMenu.Visible = true;
 		winMenu.GetNode<Label>("Control/Container/Mistakes").Text = $"Total Mistakes: {totalMistakes}";
-		winMenu.GetNode<Label>("Control/Container/Time").Text = $"Total time: {timeSpan.Minutes}m {timeSpan.Seconds}s";
+		winMenu.GetNode<Label>("Control/Container/Time").Text = $"Total Time: {timeSpan.Minutes}m {timeSpan.Seconds}s";
 	}
 
 	public override void _Process(float delta)
