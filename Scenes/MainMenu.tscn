@@ -115,6 +115,31 @@ grow_vertical = 0
 rect_scale = Vector2( 3, 2.5 )
 texture = ExtResource( 3 )
 
+[node name="Control3" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -20.0
+margin_top = -40.0
+margin_right = 20.0
+
+[node name="Label" type="Label" parent="Control3"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -20.0
+margin_top = -98.0
+margin_right = 20.0
+margin_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource( 2 )
+text = "by Daniel Lewiński"
+align = 1
+valign = 1
+
 [connection signal="pressed" from="Control/HBoxContainer/VBoxContainer/EasyButton" to="." method="OnEasyButtonPressed"]
 [connection signal="pressed" from="Control/HBoxContainer/VBoxContainer/MediumButton" to="." method="OnMediumButtonPressed"]
 [connection signal="pressed" from="Control/HBoxContainer/VBoxContainer/HardButton" to="." method="OnHardButtonPressed"]
