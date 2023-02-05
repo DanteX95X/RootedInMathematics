@@ -18,7 +18,7 @@ namespace RootedInMathematics.Scripts
 			return new Numeric(Math.Round(otherComplex.Real, 2 ), Math.Round(otherComplex.Imaginary, 2));
 		}
 
-		public string ToString()
+		public override string ToString()
 		{
 			string result = complex.Real.ToString();
 			if (complex.Imaginary != 0)

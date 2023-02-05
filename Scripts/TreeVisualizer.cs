@@ -26,7 +26,7 @@ public class TreeVisualizer : Node2D
 	private InGameMenu inGameMenu;
 	private CanvasLayer winMenu;
 	private Dictionary<TreeNode, Node2D> modelViewMapping = new Dictionary<TreeNode, Node2D>();
-	private const float distance = 500;
+	private const float distance = 600;
 	private const float rightAngle = 1.5708f;
 
 	private Queue<(TreeNode destination, TreeNode source)> visualizationQueue =
