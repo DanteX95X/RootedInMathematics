@@ -18,6 +18,7 @@ public class InGameMenu : CanvasLayer
 	public void OnMenuButtonPressed()
 	{
 		GD.Print("Back to menu");
+		GetTree().ChangeScene("res://Scenes/MainMenu.tscn");
 	}
 
 	public void DisableResumeButton()
