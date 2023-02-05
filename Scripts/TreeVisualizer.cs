@@ -175,7 +175,7 @@ public class TreeVisualizer : Node2D
 			edge.Translate(newDisplacement);
 
 			var sprite = (Sprite) destinationView;
-			edge.Scale = new Vector2(1, distance * 4/ sprite.GetRect().Size.y);
+			//edge.Scale = new Vector2(1, distance * 4/ sprite.GetRect().Size.y);
 			edge.LookAt(destinationView.Position);
 			edge.Rotate(rightAngle);
 
@@ -185,6 +185,10 @@ public class TreeVisualizer : Node2D
 			edgeLabel.Translate(newDisplacement);
 			var text = edgeLabel.GetNode<Label>("Container/Text");
 			text.Text = destination.Children[i].edgeValue.value.ToString();
+
+			var tween = edge.CreateTween();
+			var targetScale = new Vector2(1, distance * 4/ sprite.GetRect().Size.y);
+			tween.TweenProperty(edge, "scale", targetScale, 0.5f);
 		}
 	}
 }
