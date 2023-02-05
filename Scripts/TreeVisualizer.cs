@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 using System.Linq;
@@ -23,6 +24,7 @@ public class TreeVisualizer : Node2D
 	private GameSystems gameSystems;
 	private PlayerCharacter playerCharacter;
 	private InGameMenu inGameMenu;
+	private CanvasLayer winMenu;
 	private Dictionary<TreeNode, Node2D> modelViewMapping = new Dictionary<TreeNode, Node2D>();
 	private const float distance = 500;
 	private const float rightAngle = 1.5708f;
@@ -45,6 +47,7 @@ public class TreeVisualizer : Node2D
 
 		playerCharacter = GetNode<PlayerCharacter>("PlayerCharacter");
 		inGameMenu = GetNode<InGameMenu>("InGameMenu");
+		winMenu = GetNode<CanvasLayer>("WinMenu");
 	}
 
 	private void EnableMenu()
@@ -52,11 +55,14 @@ public class TreeVisualizer : Node2D
 		inGameMenu.Visible = true;
 	}
 
-	private void OnWin()
+	private void OnWin(int totalMistakes, TimeSpan timeSpan)
 	{
 		playerCharacter.PlayWinAnimation();
 		EnableMenu();
 		inGameMenu.DisableResumeButton();
+		winMenu.Visible = true;
+		winMenu.GetNode<Label>("Control/Container/Mistakes").Text = $"Total Mistakes: {totalMistakes}";
+		winMenu.GetNode<Label>("Control/Container/Time").Text = $"Total time: {timeSpan.Minutes}m {timeSpan.Seconds}s";
 	}
 
 	public override void _Process(float delta)

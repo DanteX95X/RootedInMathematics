@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Scenes/PlayerCharacter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scripts/TreeVisualizer.cs" type="Script" id=2]
@@ -8,7 +8,8 @@
 [ext_resource path="res://Scenes/TreeNode_BackOnTheTrack.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/WinningNode.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Scenes/Background.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Scenes/InGameMenu.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Scenes/WinMenu.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Scenes/InGameMenu.tscn" type="PackedScene" id=10]
 
 [node name="Visualization" type="Node2D"]
 
@@ -31,7 +32,9 @@ process_mode = 0
 editor_draw_limits = true
 editor_draw_drag_margin = true
 
-[node name="InGameMenu" parent="TreeVisualizer" instance=ExtResource( 9 )]
+[node name="InGameMenu" parent="TreeVisualizer" instance=ExtResource( 10 )]
 visible = false
+
+[node name="WinMenu" parent="TreeVisualizer" instance=ExtResource( 9 )]
 
 [node name="Background" parent="." instance=ExtResource( 8 )]

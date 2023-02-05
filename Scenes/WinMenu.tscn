@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Fonts/SpatialUITheme.tres" type="Theme" id=2]
+
+[node name="WinMenu" type="CanvasLayer"]
+visible = false
+
+[node name="Control" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="Container" type="GridContainer" parent="Control"]
+margin_right = 577.0
+margin_bottom = 204.0
+
+[node name="Time" type="Label" parent="Control/Container"]
+margin_right = 577.0
+margin_bottom = 100.0
+grow_horizontal = 0
+rect_min_size = Vector2( 300, 100 )
+theme = ExtResource( 2 )
+text = "Time: 27m 13s"
+align = 1
+valign = 1
+
+[node name="Mistakes" type="Label" parent="Control/Container"]
+margin_top = 104.0
+margin_right = 577.0
+margin_bottom = 204.0
+grow_horizontal = 0
+rect_min_size = Vector2( 300, 100 )
+theme = ExtResource( 2 )
+text = "Mistakes: 15"
+align = 1
+valign = 1

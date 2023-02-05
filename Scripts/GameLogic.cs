@@ -13,17 +13,20 @@ public class GameLogic : Node
 	private int winningDepth = 3;
 
 	private int mistakesCounter = 0;
+	private int totalMistakes = 0;
+	private DateTime startTime;
 	
 	public bool IsWon { get; private set; } = false;
 	
 	public event Action<TreeNode, TreeNode> OnMoveToNode;
-	public event Action OnWin;
+	public event Action<int, TimeSpan> OnWin;
 
 	public override void _Ready()
 	{
 		root = new TreeNode(null, 0);
 		random = new Random(3);
 		currentNode = root;
+		startTime = DateTime.Now;
 		currentNode.OnActivate += ReactOnActivate;
 	}
 
@@ -74,6 +77,7 @@ public class GameLogic : Node
 		{
 			GD.Print("Answer incorrect");
 			++mistakesCounter;
+			++totalMistakes;
 			ActivateCurrentNode();
 			OnMoveToNode?.Invoke(currentNode, previousNode);
 		}
@@ -93,7 +97,7 @@ public class GameLogic : Node
 		if (currentNode.Depth >= winningDepth)
 		{
 			GD.Print("You won");
-			OnWin?.Invoke();
+			OnWin?.Invoke(totalMistakes, DateTime.Now - startTime);
 			IsWon = true;
 
 			return true;
