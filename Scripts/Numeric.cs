@@ -17,5 +17,18 @@ namespace RootedInMathematics.Scripts
 			var otherComplex = Complex.Pow(complex, power);
 			return new Numeric(Math.Round(otherComplex.Real, 2 ), Math.Round(otherComplex.Imaginary, 2));
 		}
+
+		public string ToString()
+		{
+			string result = complex.Real.ToString();
+			if (complex.Imaginary != 0)
+			{
+				result += "+";
+				result += complex.Imaginary.ToString();
+				result += "i";
+			}
+
+			return result;
+		}
 	}
 }

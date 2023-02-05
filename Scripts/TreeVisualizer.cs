@@ -101,7 +101,7 @@ public class TreeVisualizer : Node2D
 			var textNode = destinationView.GetNode<Label>("Container/Text");
 			if (destination.NodeValue != null)
 			{
-				textNode.Text = destination.NodeValue.complex.ToString();
+				textNode.Text = destination.NodeValue.ToString();
 			}
 			
 			if (source == null || !modelViewMapping.TryGetValue(source, out Node2D sourceView))
@@ -223,7 +223,7 @@ public class TreeVisualizer : Node2D
 			edgeLabel.Position = Vector2.Zero;
 			edgeLabel.Translate(newDisplacement * distance*0.4f);
 			var text = edgeLabel.GetNode<Label>("Container/Text");
-			text.Text = destination.Children[i].edgeValue.complex.ToString();
+			text.Text = destination.Children[i].edgeValue.ToString();
 
 			var tween = edge.CreateTween();
 			var targetScale = new Vector2(0.1f, 0.15f);//distance * 4/ sprite.GetRect().Size.y);
