@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Audio/349873__matrixxx___water_drop_02.wav" type="AudioStream" id=1]
+
+[node name="ButtonAudio" type="AudioStreamPlayer2D"]
+stream = ExtResource( 1 )

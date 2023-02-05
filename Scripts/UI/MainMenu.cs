@@ -2,23 +2,32 @@ using Godot;
 
 public class MainMenu : CanvasLayer
 {
+	private const float timerLength = 0.2f;
+	
 	public void OnEasyButtonPressed()
 	{
-		GetTree().ChangeScene("res://Scenes/GameEasy.tscn");
+		ChangeScene("res://Scenes/GameEasy.tscn");
 	}
 	
 	public void OnMediumButtonPressed()
 	{
-		GetTree().ChangeScene("res://Scenes/GameMedium.tscn");
+		ChangeScene("res://Scenes/GameMedium.tscn");
 	}
 	
 	public void OnHardButtonPressed()
 	{
-		GetTree().ChangeScene("res://Scenes/GameHard.tscn");
+		ChangeScene("res://Scenes/GameHard.tscn");
 	}
 
-	public void OnQuitButtonPressed()
+	public async void OnQuitButtonPressed()
 	{
+		await ToSignal(GetTree().CreateTimer(timerLength), "timeout");
 		GetTree().Quit();
+	}
+
+	public async void ChangeScene(string scenePath)
+	{
+		await ToSignal(GetTree().CreateTimer(timerLength), "timeout");
+		GetTree().ChangeScene(scenePath);
 	}
 }

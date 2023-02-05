@@ -3,9 +3,11 @@ using System;
 
 public class InGameMenu : CanvasLayer
 {
-	public void OnReplayButtonPressed()
+	private const float timerLength = 0.2f;
+	public async void OnReplayButtonPressed()
 	{
 		GD.Print("Replay");
+		await ToSignal(GetTree().CreateTimer(timerLength), "timeout");
 		GetTree().ReloadCurrentScene();
 	}
 
@@ -15,9 +17,10 @@ public class InGameMenu : CanvasLayer
 		Visible = false;
 	}
 
-	public void OnMenuButtonPressed()
+	public async void OnMenuButtonPressed()
 	{
 		GD.Print("Back to menu");
+		await ToSignal(GetTree().CreateTimer(timerLength), "timeout");
 		GetTree().ChangeScene("res://Scenes/MainMenu.tscn");
 	}
 

@@ -58,7 +58,7 @@ public class TreeVisualizer : Node2D
 
 	private void OnWin(int totalMistakes, TimeSpan timeSpan)
 	{
-		playerCharacter.PlayWinAnimation();
+		playerCharacter.OnWin();
 		EnableMenu();
 		inGameMenu.DisableResumeButton();
 		winMenu.Visible = true;
@@ -95,6 +95,8 @@ public class TreeVisualizer : Node2D
 
 	private void OnMovedToNode(TreeNode destination, TreeNode source)
 	{
+		playerCharacter.OnMove();
+		
 		Vector2 lookingPosition = Vector2.Up;
 		if (!modelViewMapping.TryGetValue(destination, out Node2D destinationView))
 		{
