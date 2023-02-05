@@ -15,7 +15,7 @@ public class TreeVisualizer : Node2D
 	private PackedScene edgeLabelScene = null;
 
 	private GameSystems gameSystems;
-	private PlayerCharacter playerCharacter;
+	private Node2D playerCharacter;
 	private Dictionary<TreeNode, Node2D> modelViewMapping = new Dictionary<TreeNode, Node2D>();
 	private const float distance = 500;
 	private const float rightAngle = 1.5708f;
@@ -34,7 +34,7 @@ public class TreeVisualizer : Node2D
 		gameSystems = GetNode<GameSystems>("/root/Root/GameSystems");
 		gameSystems.GameLogic.OnMoveToNode += QueueUpMovement;
 
-		playerCharacter = GetNode<PlayerCharacter>("PlayerCharacter");
+		playerCharacter = GetNode<Node2D>("PlayerCharacter");
 	}
 
 	public override void _Process(float delta)
@@ -117,7 +117,10 @@ public class TreeVisualizer : Node2D
 			playerTween = playerCharacter.CreateTween();
 			playerTween.TweenProperty(playerCharacter, "rotation", midwayRotation, 0.2f);
 			playerTween.TweenProperty(playerCharacter, "position", destinationView.Position, 1.0f);
-			playerTween.TweenProperty(playerCharacter, "rotation", targetRotation, 0.2f);
+			if (source.NodeValue != null)
+			{
+				playerTween.TweenProperty(playerCharacter, "rotation", targetRotation, 0.2f);
+			}
 		}
 		
 		UpdateVisibleNodes(destination, destinationView);
