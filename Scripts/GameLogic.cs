@@ -3,6 +3,13 @@ using System.Data;
 using Godot;
 using RootedInMathematics.Scripts;
 
+public enum NumberType
+{
+	Integers,
+	Real,
+	Complex,
+}
+
 public class GameLogic : Node
 {
 	private TreeNode root;
@@ -11,6 +18,9 @@ public class GameLogic : Node
 
 	[Export(PropertyHint.Range, "1,10,1")]
 	private int winningDepth = 3;
+
+	[Export(PropertyHint.Enum)]
+	private NumberType numberType = NumberType.Integers;
 
 	private int mistakesCounter = 0;
 	private int totalMistakes = 0;
@@ -43,7 +53,7 @@ public class GameLogic : Node
 
 	public void ReactOnActivate(TreeNode node)
 	{
-		GD.Print($"node activated {node.NodeValue.value} from GameLogic");
+		GD.Print($"node activated {node.NodeValue.complex} from GameLogic");
 	}
 
 	public void MoveToChild(int childIndex)
@@ -87,7 +97,7 @@ public class GameLogic : Node
 	{
 		if (currentNode.NodeValue == null)
 		{
-			currentNode.GenerateNode(random);
+			currentNode.GenerateNode(random, numberType);
 		}
 		currentNode.ActivateNode();
 	}

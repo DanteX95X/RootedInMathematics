@@ -12,3 +12,5 @@ script = ExtResource( 3 )
 
 [node name="GameLogic" type="Node" parent="."]
 script = ExtResource( 1 )
+winningDepth = 5
+numberType = 2

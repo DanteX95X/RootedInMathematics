@@ -1,19 +1,34 @@
-using Godot;
+using System;
+using System.Numerics;
 
 namespace RootedInMathematics.Scripts
 {
 	public class Numeric
 	{
-		public readonly float value;
+		public readonly Complex complex;
 
-		public Numeric(float value)
+		public Numeric(double real, double imaginary)
 		{
-			this.value = value;
+			complex = new Complex(real, imaginary);
 		}
 
-		public Numeric ToPower(float power)
+		public Numeric ToPower(double power)
 		{
-			return new Numeric(Mathf.Pow(value, power));
+			var otherComplex = Complex.Pow(complex, power);
+			return new Numeric(Math.Round(otherComplex.Real, 2 ), Math.Round(otherComplex.Imaginary, 2));
+		}
+
+		public override string ToString()
+		{
+			string result = complex.Real.ToString();
+			if (complex.Imaginary != 0)
+			{
+				result += "+";
+				result += complex.Imaginary.ToString();
+				result += "i";
+			}
+
+			return result;
 		}
 	}
 }
