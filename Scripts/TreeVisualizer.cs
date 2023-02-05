@@ -226,7 +226,7 @@ public class TreeVisualizer : Node2D
 			text.Text = destination.Children[i].edgeValue.value.ToString();
 
 			var tween = edge.CreateTween();
-			var targetScale = new Vector2(0.1f, 0.1f);//distance * 4/ sprite.GetRect().Size.y);
+			var targetScale = new Vector2(0.1f, 0.15f);//distance * 4/ sprite.GetRect().Size.y);
 			tween.TweenProperty(edge, "scale", targetScale, 0.5f);
 		}
 	}
