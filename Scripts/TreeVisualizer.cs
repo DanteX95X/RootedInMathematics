@@ -14,6 +14,9 @@ public class TreeVisualizer : Node2D
 	[Export]
 	private PackedScene edgeLabelScene = null;
 
+	[Export]
+	private PackedScene backOnTrackNodeScene = null;
+
 	private GameSystems gameSystems;
 	private Node2D playerCharacter;
 	private Dictionary<TreeNode, Node2D> modelViewMapping = new Dictionary<TreeNode, Node2D>();
@@ -56,7 +59,15 @@ public class TreeVisualizer : Node2D
 		Vector2 lookingPosition = Vector2.Up;
 		if (!modelViewMapping.TryGetValue(destination, out Node2D destinationView))
 		{
-			destinationView = (Node2D) treeNodeScene.Instance();
+			if (destination.NodeValue != null)
+			{
+				destinationView = (Node2D) treeNodeScene.Instance();
+			}
+			else
+			{
+				destinationView = (Node2D) backOnTrackNodeScene.Instance();
+			}
+
 			AddChild(destinationView);
 			var textNode = destinationView.GetNode<Label>("Container/Text");
 			if (destination.NodeValue != null)
