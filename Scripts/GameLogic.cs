@@ -14,7 +14,10 @@ public class GameLogic : Node
 
 	private int mistakesCounter = 0;
 	
+	public bool IsWon { get; private set; } = false;
+	
 	public event Action<TreeNode, TreeNode> OnMoveToNode;
+	public event Action OnWin;
 
 	public override void _Ready()
 	{
@@ -53,9 +56,11 @@ public class GameLogic : Node
 			GD.Print("Answer correct");
 			if (mistakesCounter == 0)
 			{
-				ActivateCurrentNode();
+				if (!CheckWinCondition())
+				{
+					ActivateCurrentNode();
+				}
 				OnMoveToNode?.Invoke(currentNode, previousNode);
-				CheckWinCondition();
 			}
 			else
 			{
@@ -83,12 +88,18 @@ public class GameLogic : Node
 		currentNode.ActivateNode();
 	}
 
-	private void CheckWinCondition()
+	private bool CheckWinCondition()
 	{
 		if (currentNode.Depth >= winningDepth)
 		{
 			GD.Print("You won");
+			OnWin?.Invoke();
+			IsWon = true;
+
+			return true;
 		}
+
+		return false;
 	}
 
 	private void TraverseUpTheTree()

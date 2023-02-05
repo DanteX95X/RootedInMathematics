@@ -17,8 +17,11 @@ public class TreeVisualizer : Node2D
 	[Export]
 	private PackedScene backOnTrackNodeScene = null;
 
+	[Export]
+	private PackedScene winningNodeScene = null;
+
 	private GameSystems gameSystems;
-	private Node2D playerCharacter;
+	private PlayerCharacter playerCharacter;
 	private Dictionary<TreeNode, Node2D> modelViewMapping = new Dictionary<TreeNode, Node2D>();
 	private const float distance = 500;
 	private const float rightAngle = 1.5708f;
@@ -36,8 +39,14 @@ public class TreeVisualizer : Node2D
 		GD.Print(GetPath());
 		gameSystems = GetNode<GameSystems>("/root/Root/GameSystems");
 		gameSystems.GameLogic.OnMoveToNode += QueueUpMovement;
+		gameSystems.GameLogic.OnWin += OnWin;
 
-		playerCharacter = GetNode<Node2D>("PlayerCharacter");
+		playerCharacter = GetNode<PlayerCharacter>("PlayerCharacter");
+	}
+
+	private void OnWin()
+	{
+		playerCharacter.PlayWinAnimation();
 	}
 
 	public override void _Process(float delta)
@@ -59,7 +68,11 @@ public class TreeVisualizer : Node2D
 		Vector2 lookingPosition = Vector2.Up;
 		if (!modelViewMapping.TryGetValue(destination, out Node2D destinationView))
 		{
-			if (destination.NodeValue != null)
+			if (gameSystems.GameLogic.IsWon)
+			{
+				destinationView = (Node2D) winningNodeScene.Instance();
+			}
+			else if (destination.NodeValue != null)
 			{
 				destinationView = (Node2D) treeNodeScene.Instance();
 			}
