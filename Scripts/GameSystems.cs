@@ -9,6 +9,7 @@ public class GameSystems : Node
 	private bool isInitialized = false;
 
 	public GameLogic GameLogic => gameLogic;
+	public InputSystem InputSystem => inputSystem;
 	
 	public override void _Ready()
 	{

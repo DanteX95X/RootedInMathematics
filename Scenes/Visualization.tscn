@@ -7,7 +7,7 @@
 [ext_resource path="res://Scenes/EdgeLabel.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/TreeNode_BackOnTheTrack.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/WinningNode.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Scenes/WinMenu.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Scenes/InGameMenu.tscn" type="PackedScene" id=9]
 
 [node name="Visualization" type="Node2D"]
 
@@ -30,5 +30,5 @@ process_mode = 0
 editor_draw_limits = true
 editor_draw_drag_margin = true
 
-[node name="WinMenu" parent="TreeVisualizer" instance=ExtResource( 9 )]
+[node name="InGameMenu" parent="TreeVisualizer" instance=ExtResource( 9 )]
 visible = false

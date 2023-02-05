@@ -22,6 +22,7 @@ public class TreeVisualizer : Node2D
 
 	private GameSystems gameSystems;
 	private PlayerCharacter playerCharacter;
+	private InGameMenu inGameMenu;
 	private Dictionary<TreeNode, Node2D> modelViewMapping = new Dictionary<TreeNode, Node2D>();
 	private const float distance = 500;
 	private const float rightAngle = 1.5708f;
@@ -40,15 +41,22 @@ public class TreeVisualizer : Node2D
 		gameSystems = GetNode<GameSystems>("/root/Root/GameSystems");
 		gameSystems.GameLogic.OnMoveToNode += QueueUpMovement;
 		gameSystems.GameLogic.OnWin += OnWin;
+		gameSystems.InputSystem.OnPause += EnableMenu;
 
 		playerCharacter = GetNode<PlayerCharacter>("PlayerCharacter");
+		inGameMenu = GetNode<InGameMenu>("InGameMenu");
+	}
+
+	private void EnableMenu()
+	{
+		inGameMenu.Visible = true;
 	}
 
 	private void OnWin()
 	{
 		playerCharacter.PlayWinAnimation();
-		var winMenu = GetNode<CanvasLayer>("WinMenu");
-		winMenu.Visible = true;
+		EnableMenu();
+		inGameMenu.DisableResumeButton();
 	}
 
 	public override void _Process(float delta)
