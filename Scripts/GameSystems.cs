@@ -10,11 +10,15 @@ public class GameSystems : Node
 
 	public GameLogic GameLogic => gameLogic;
 	public InputSystem InputSystem => inputSystem;
+
+	[Export]
+	private NumberType numberType = NumberType.Integers;
 	
 	public override void _Ready()
 	{
 		inputSystem = GetNode<InputSystem>("InputSystem");
 		gameLogic = GetNode<GameLogic>("GameLogic");
+		gameLogic.numberType = numberType;
 
 		inputSystem.OnSelectChildAction += ProcessInput;
 	}

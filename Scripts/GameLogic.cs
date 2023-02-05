@@ -18,9 +18,8 @@ public class GameLogic : Node
 
 	[Export(PropertyHint.Range, "1,10,1")]
 	private int winningDepth = 3;
-
-	[Export(PropertyHint.Enum)]
-	private NumberType numberType = NumberType.Integers;
+	
+	internal NumberType numberType = NumberType.Integers;
 
 	private int mistakesCounter = 0;
 	private int totalMistakes = 0;
