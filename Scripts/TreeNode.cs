@@ -31,23 +31,23 @@ namespace RootedInMathematics.Scripts
 			SortedSet<double> generatedPossibilities = new SortedSet<double>();
 			for (int i = 0; i < 3; ++i)
 			{
-				double childValue = 0;
+				Numeric childValue = new Numeric(0);
 				do
 				{
 					if (numberType == NumberType.Integers)
 					{
-						childValue = random.Next(1, upperLimit);
+						childValue = new Numeric(random.Next(1, upperLimit));
 					}
 					else if (numberType == NumberType.Real)
 					{
-						childValue = Math.Round(random.NextDouble() + random.Next(1, upperLimit), 2);
+						childValue = new Numeric(Math.Round(random.NextDouble() + random.Next(1, upperLimit), 2));
 					}
 				}
-				while (generatedPossibilities.Contains(childValue));
+				while (generatedPossibilities.Contains(childValue.ToPower(2).value));
 
-				generatedPossibilities.Add(childValue);
+				generatedPossibilities.Add(childValue.ToPower(2).value);
 				
-				Numeric edgeValue = new Numeric(childValue);
+				Numeric edgeValue = childValue;
 				children.Add((new TreeNode(this, depth + 1), edgeValue));
 			}
 			correctChildIndex = random.Next(children.Count);

@@ -12,4 +12,3 @@ script = ExtResource( 3 )
 
 [node name="GameLogic" type="Node" parent="."]
 script = ExtResource( 1 )
-numberType = 1
