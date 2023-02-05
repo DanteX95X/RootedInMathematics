@@ -5,8 +5,8 @@ public class InGameMenu : CanvasLayer
 {
 	public void OnReplayButtonPressed()
 	{
-		GD.Print("Pressed");
-		GetTree().ChangeScene("res://Scenes/Game.tscn");
+		GD.Print("Replay");
+		GetTree().ReloadCurrentScene();
 	}
 
 	public void OnResumeButtonPressed()
