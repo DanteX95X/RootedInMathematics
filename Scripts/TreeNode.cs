@@ -33,7 +33,7 @@ namespace RootedInMathematics.Scripts
 				float childValue = 0;
 				do
 				{
-					childValue = random.Next(1, 11);
+					childValue = random.Next(1, 101);
 				}
 				while (generatedPossibilities.Contains(childValue));
 

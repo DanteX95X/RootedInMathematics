@@ -16,8 +16,6 @@ public class TreeVisualizer : Node2D
 
 	private GameSystems gameSystems;
 	private Node2D playerCharacter;
-	private Camera2D camera;
-	private Vector2 cachedPosition = Vector2.Zero;
 	private Dictionary<TreeNode, Node2D> modelViewMapping = new Dictionary<TreeNode, Node2D>();
 	private const float distance = 500;
 	private const float rightAngle = 1.5708f;
@@ -28,6 +26,8 @@ public class TreeVisualizer : Node2D
 	private Queue<Node2D> visibleNodes = new Queue<Node2D>();
 	private const int allowedVisibles = 2;
 
+	private SceneTreeTween playerTween = null;
+
 	public override void _Ready()
 	{
 		GD.Print(GetPath());
@@ -35,12 +35,11 @@ public class TreeVisualizer : Node2D
 		gameSystems.GameLogic.OnMoveToNode += QueueUpMovement;
 
 		playerCharacter = GetNode<Node2D>("PlayerCharacter");
-		camera = playerCharacter.GetNode<Camera2D>("Camera");
 	}
 
 	public override void _Process(float delta)
 	{
-		if (visualizationQueue.Any())
+		if (visualizationQueue.Any() && (playerTween == null || !playerTween.IsRunning()))
 		{
 			var data = visualizationQueue.Dequeue();
 			OnMovedToNode(data.destination, data.source);
@@ -87,17 +86,41 @@ public class TreeVisualizer : Node2D
 			
 			SpawnEdges(destinationView, destination);
 			modelViewMapping.Add(destination, destinationView);
+			var cachedPosition = playerCharacter.Position;
+			var cachedRotation = playerCharacter.Rotation;
 			playerCharacter.Position = destinationView.Position;
 			playerCharacter.LookAt(lookingPosition);
 			destinationView.Rotation = playerCharacter.Rotation;
 			destinationView.Rotate(rightAngle);
+			playerCharacter.Position = cachedPosition;
+			var targetRotation = playerCharacter.Rotation;
+			playerCharacter.Rotation = cachedRotation;
+
+			playerTween = playerCharacter.CreateTween();
+			playerTween.TweenProperty(playerCharacter, "rotation", targetRotation, 0.2f);
+			playerTween.TweenProperty(playerCharacter, "position", destinationView.Position, 1.0f);
 		}
 		else
 		{
 			Node2D sourceView = modelViewMapping[source];
+			var cachedPosition = playerCharacter.Position;
+			var cachedRotation = playerCharacter.Rotation;
 			playerCharacter.Position = destinationView.Position;
+			playerCharacter.LookAt(sourceView.Position);
+			var midwayRotation = playerCharacter.Rotation;
 			playerCharacter.Rotation = destinationView.Rotation;
 			playerCharacter.Rotate(-rightAngle);
+			playerCharacter.Position = cachedPosition;
+			var targetRotation = playerCharacter.Rotation;
+			playerCharacter.Rotation = cachedRotation;
+			
+			playerTween = playerCharacter.CreateTween();
+			playerTween.TweenProperty(playerCharacter, "rotation", midwayRotation, 0.2f);
+			playerTween.TweenProperty(playerCharacter, "position", destinationView.Position, 1.0f);
+			if (source.NodeValue != null)
+			{
+				playerTween.TweenProperty(playerCharacter, "rotation", targetRotation, 0.2f);
+			}
 		}
 		
 		UpdateVisibleNodes(destination, destinationView);
@@ -105,6 +128,11 @@ public class TreeVisualizer : Node2D
 
 	private void UpdateVisibleNodes(TreeNode destination, Node2D destinationView)
 	{
+		foreach (var node in visibleNodes)
+		{
+			node.GetNode<AnimationPlayer>("AnimationPlayer").Play("FadeOut");
+		}
+		
 		PruneRedundantVisibleNodes();
 
 		if (destination.Parent != null)
@@ -122,6 +150,7 @@ public class TreeVisualizer : Node2D
 		foreach (var node in visibleNodes)
 		{
 			node.Visible = true;
+			node.GetNode<AnimationPlayer>("AnimationPlayer").PlayBackwards("FadeOut");
 		}
 	}
 
@@ -146,7 +175,7 @@ public class TreeVisualizer : Node2D
 			edge.Translate(newDisplacement);
 
 			var sprite = (Sprite) destinationView;
-			edge.Scale = new Vector2(1, distance * 4/ sprite.GetRect().Size.y);
+			//edge.Scale = new Vector2(1, distance * 4/ sprite.GetRect().Size.y);
 			edge.LookAt(destinationView.Position);
 			edge.Rotate(rightAngle);
 
@@ -156,6 +185,10 @@ public class TreeVisualizer : Node2D
 			edgeLabel.Translate(newDisplacement);
 			var text = edgeLabel.GetNode<Label>("Container/Text");
 			text.Text = destination.Children[i].edgeValue.value.ToString();
+
+			var tween = edge.CreateTween();
+			var targetScale = new Vector2(1, distance * 4/ sprite.GetRect().Size.y);
+			tween.TweenProperty(edge, "scale", targetScale, 0.5f);
 		}
 	}
 }
