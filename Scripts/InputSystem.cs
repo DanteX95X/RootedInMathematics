@@ -10,7 +10,7 @@ public class InputSystem : Node
 	private List<(string actionName, int childIndex)> actionBindings =
 		new List<(string actionName, int childIndex)>() {("left", 0), ("down", 1), ("right", 2)};
 
-	private float timeCounter = 0;
+	private bool inputAllowed = true;
 	
 	public override void _Ready()
 	{
@@ -24,19 +24,21 @@ public class InputSystem : Node
 			OnPause?.Invoke();
 		}
 		
-		timeCounter -= delta;
-		if (timeCounter > 0)
+		if (inputAllowed)
 		{
-			return;
-		}
-
-		foreach (var (actionName, childIndex) in actionBindings)
-		{
-			if (Input.IsActionJustReleased(actionName))
+			foreach (var (actionName, childIndex) in actionBindings)
 			{
-				OnSelectChildAction?.Invoke(childIndex);
-				timeCounter = 1;
+				if (Input.IsActionJustReleased(actionName))
+				{
+					OnSelectChildAction?.Invoke(childIndex);
+					inputAllowed = false;
+				}
 			}
 		}
+	}
+
+	public void NotifyInput()
+	{
+		inputAllowed = true;
 	}
 }

@@ -36,6 +36,7 @@ public class TreeVisualizer : Node2D
 	private const int allowedVisibles = 2;
 
 	private SceneTreeTween playerTween = null;
+	public bool isBusy = false;
 
 	public override void _Ready()
 	{
@@ -67,10 +68,23 @@ public class TreeVisualizer : Node2D
 
 	public override void _Process(float delta)
 	{
-		if (visualizationQueue.Any() && (playerTween == null || !playerTween.IsRunning()))
+		if (playerTween == null || !playerTween.IsRunning())
 		{
-			var data = visualizationQueue.Dequeue();
-			OnMovedToNode(data.destination, data.source);
+			if (visualizationQueue.Any())
+			{
+				var data = visualizationQueue.Dequeue();
+				OnMovedToNode(data.destination, data.source);
+				isBusy = true;
+			}
+			else
+			{
+				isBusy = false;
+				gameSystems.InputSystem.NotifyInput();
+			}
+		}
+		else
+		{
+			isBusy = true;
 		}
 	}
 	
