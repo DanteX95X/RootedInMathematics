@@ -128,6 +128,11 @@ public class TreeVisualizer : Node2D
 
 	private void UpdateVisibleNodes(TreeNode destination, Node2D destinationView)
 	{
+		foreach (var node in visibleNodes)
+		{
+			node.GetNode<AnimationPlayer>("AnimationPlayer").Play("FadeOut");
+		}
+		
 		PruneRedundantVisibleNodes();
 
 		if (destination.Parent != null)
@@ -145,6 +150,7 @@ public class TreeVisualizer : Node2D
 		foreach (var node in visibleNodes)
 		{
 			node.Visible = true;
+			node.GetNode<AnimationPlayer>("AnimationPlayer").PlayBackwards("FadeOut");
 		}
 	}
 
