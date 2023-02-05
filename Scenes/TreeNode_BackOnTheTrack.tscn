@@ -10,7 +10,7 @@ self_modulate = Color( 1, 1, 1, 0 )
 texture = ExtResource( 1 )
 
 [node name="Node2D" type="Sprite" parent="."]
-modulate = Color( 0.105882, 1, 0.00392157, 1 )
+modulate = Color( 1, 0, 0, 0.717647 )
 position = Vector2( -1, -107 )
 scale = Vector2( 1.5, 1.5 )
 
