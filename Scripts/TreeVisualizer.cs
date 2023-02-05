@@ -47,6 +47,8 @@ public class TreeVisualizer : Node2D
 	private void OnWin()
 	{
 		playerCharacter.PlayWinAnimation();
+		var winMenu = GetNode<CanvasLayer>("WinMenu");
+		winMenu.Visible = true;
 	}
 
 	public override void _Process(float delta)
