@@ -1,8 +1,10 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://Graphics/branch1.png" type="Texture" id=1]
 
 [node name="Node2D" type="Sprite"]
-scale = Vector2( 2, 2 )
+position = Vector2( 0, -47 )
+scale = Vector2( 0.01, 0.04 )
 z_index = -1
 texture = ExtResource( 1 )
+offset = Vector2( 0, 2350 )

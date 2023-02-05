@@ -168,26 +168,25 @@ public class TreeVisualizer : Node2D
 		var normalizedDisplacement = Vector2.Down;
 		for (int i = 0; i < destination.Children.Count; ++i)
 		{
-			var newDisplacement = normalizedDisplacement.Rotated(-1 * (i - 1)) * (distance / 2);
+			var newDisplacement = normalizedDisplacement.Rotated(-1 * (i - 1));// * (distance / 2);
 			Node2D edge = (Node2D) edgeScene.Instance();
 			destinationView.AddChild(edge);
 			edge.Position = Vector2.Zero;
 			edge.Translate(newDisplacement);
 
 			var sprite = (Sprite) destinationView;
-			//edge.Scale = new Vector2(1, distance * 4/ sprite.GetRect().Size.y);
 			edge.LookAt(destinationView.Position);
 			edge.Rotate(rightAngle);
 
 			var edgeLabel = (Node2D) edgeLabelScene.Instance();
 			destinationView.AddChild(edgeLabel);
 			edgeLabel.Position = Vector2.Zero;
-			edgeLabel.Translate(newDisplacement);
+			edgeLabel.Translate(newDisplacement * distance*0.4f);
 			var text = edgeLabel.GetNode<Label>("Container/Text");
 			text.Text = destination.Children[i].edgeValue.value.ToString();
 
 			var tween = edge.CreateTween();
-			var targetScale = new Vector2(1, distance * 4/ sprite.GetRect().Size.y);
+			var targetScale = new Vector2(0.1f, 0.1f);//distance * 4/ sprite.GetRect().Size.y);
 			tween.TweenProperty(edge, "scale", targetScale, 0.5f);
 		}
 	}
