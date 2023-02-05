@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/relaxed-vlog-night-street-131746.mp3-33fca435ceec7258bf45141ebf7d8f5d.mp3str"
+
+[deps]
+
+source_file="res://Audio/relaxed-vlog-night-street-131746.mp3"
+dest_files=[ "res://.import/relaxed-vlog-night-street-131746.mp3-33fca435ceec7258bf45141ebf7d8f5d.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
